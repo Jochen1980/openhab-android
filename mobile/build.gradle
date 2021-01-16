@@ -5,10 +5,10 @@ buildscript {
     ext.kotlin_coroutines_version = '1.4.2'
     ext.ok_http_version = '4.9.0'
     ext.work_manager_version = '2.4.0'
-    ext.about_libraries_version = '8.6.3'
+    ext.about_libraries_version = '8.6.5'
     ext.powermock_version = '2.0.9'
     ext.espresso_version = '3.3.0'
-    ext.exoplayer_version = '2.12.2'
+    ext.exoplayer_version = '2.12.3'
 
     repositories {
         mavenCentral()
@@ -47,8 +47,8 @@ android {
         applicationId "org.openhab.habdroid"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 343
-        versionName "2.15.17-beta"
+        versionCode 348
+        versionName "2.15.22-beta"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "long", "TIMESTAMP", System.currentTimeMillis() + "L"
@@ -170,7 +170,7 @@ dependencies {
     implementation "com.mikepenz:aboutlibraries-core:$about_libraries_version"
     implementation "com.mikepenz:aboutlibraries:$about_libraries_version"
     implementation "com.github.GrenderG:Toasty:1.4.2"
-    testImplementation "org.mockito:mockito-core:3.6.28"
+    testImplementation "org.mockito:mockito-core:3.7.0"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
     testImplementation "junit:junit:4.13.1"
     testImplementation "org.json:json:20201115"

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -26,6 +26,7 @@ import java.security.Principal
 import java.security.PrivateKey
 import java.security.cert.X509Certificate
 import java.util.HashSet
+import java.util.concurrent.CancellationException
 import javax.net.ssl.HttpsURLConnection
 import javax.net.ssl.KeyManager
 import javax.net.ssl.SSLContext
@@ -372,6 +373,8 @@ class ConnectionFactory internal constructor(
                     active?.remote?.toCloudConnection()
                 }
                 updateActiveCloud(CloudConnectionResult(result, null))
+            } catch (e: CancellationException) {
+                // ignored
             } catch (e: Exception) {
                 updateActiveCloud(CloudConnectionResult(null, e))
             }
@@ -384,6 +387,8 @@ class ConnectionFactory internal constructor(
                         primary?.remote?.toCloudConnection()
                     }
                     updateState(true, primaryCloud = CloudConnectionResult(result, null))
+                } catch (e: CancellationException) {
+                    // ignored
                 } catch (e: Exception) {
                     updateState(true, primaryCloud = CloudConnectionResult(null, e))
                 }

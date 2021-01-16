@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -16,7 +16,6 @@ package org.openhab.habdroid.ui
 import android.content.Context
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.annotation.DrawableRes
 import androidx.core.net.toUri
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
@@ -202,9 +201,3 @@ class AboutActivity : AbstractBaseActivity(), FragmentManager.OnBackStackChanged
         }
     }
 }
-
-data class PushNotificationStatus(
-    val message: String,
-    @DrawableRes val icon: Int,
-    val notifyUser: Boolean
-)

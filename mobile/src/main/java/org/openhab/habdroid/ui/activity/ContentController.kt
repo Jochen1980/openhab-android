@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -72,7 +72,7 @@ import org.openhab.habdroid.util.openInBrowser
  * The layout of the content area is up to the respective subclasses.
  */
 abstract class ContentController protected constructor(private val activity: MainActivity) :
-    PageConnectionHolderFragment.ParentCallback {
+    PageConnectionHolderFragment.ParentCallback, WebViewFragment.ParentCallback {
     protected val fm: FragmentManager = activity.supportFragmentManager
 
     private var noConnectionFragment: Fragment? = null
@@ -269,17 +269,19 @@ abstract class ContentController protected constructor(private val activity: Mai
             activity.getString(ui.multiServerTitleRes, activeServerName)
         }
 
+        val webViewFragment = WebViewFragment.newInstance(
+            title,
+            ui.errorRes,
+            ui.urlToLoad,
+            ui.urlForError,
+            activeServerId,
+            ui.shortcutAction,
+            title,
+            ui.shortcutIconRes
+        )
+        webViewFragment.callback = this
         showTemporaryPage(
-            WebViewFragment.newInstance(
-                title,
-                ui.errorRes,
-                ui.urlToLoad,
-                ui.urlForError,
-                activeServerId,
-                ui.shortcutAction,
-                title,
-                ui.shortcutIconRes
-            )
+            webViewFragment
         )
     }
 
@@ -440,6 +442,15 @@ abstract class ContentController protected constructor(private val activity: Mai
         return false
     }
 
+    override fun closeFragment() {
+        if (temporaryPage != null) {
+            temporaryPage = null
+            activity.updateTitle()
+            updateFragmentState(FragmentUpdateReason.PAGE_UPDATE)
+            updateConnectionState()
+        }
+    }
+
     override fun onPageUpdated(pageUrl: String, pageTitle: String?, widgets: List<Widget>) {
         Log.d(TAG, "Got update for URL $pageUrl, pending $pendingDataLoadUrls")
         val fragment = findWidgetFragmentForUrl(pageUrl)
@@ -553,8 +564,12 @@ abstract class ContentController protected constructor(private val activity: Mai
         companion object {
             fun newInstance(message: CharSequence): CommunicationFailureFragment {
                 val f = CommunicationFailureFragment()
-                f.arguments = buildArgs(message, R.string.try_again_button,
-                    R.drawable.ic_openhab_appicon_340dp /* FIXME */, false)
+                f.arguments = buildArgs(
+                    message,
+                    R.string.try_again_button,
+                    R.drawable.ic_openhab_appicon_340dp,
+                    false
+                )
                 return f
             }
         }
